@@ -32,21 +32,13 @@ displayed data at the right.
 
 6.       Run the script.
 
-7.     The script should create two column-separated variate (CSV files), one with station metadata and one with the daily values for the specified interval.
+7.     The script should create two column-separated variate (CSV files), one with station metadata and one with the daily values for the specified interval. The variables for daily data should match the BMP template except that the new dataset contains one extra variable, average vapor pressure.
 
 8. Cut and paste the data into the template as required.
 
 **Troubleshooting**
 
                  The most likely source of errors is incorrect spelling or capitalization of the
-station name. The name must match exactly the name at the FAWN web site. Note
-the use of a blank space “ “ in names with two or more parts (e.g., ‘Babson Park”). For example, if we try to use the name ‘Jupiter 2’, we get these messages:
-
-trying URL 'https://fawn.ifas.ufl.edu/data/fawnpub/DSSAT/Jupiter
-2.csv'
-
-Error in download.file(url, temp_file, method =
-"auto") :   cannot open URL
-'https://fawn.ifas.ufl.edu/data/fawnpub/DSSAT/Jupiter 2.csv'
+station name. The name must match exactly the name at the FAWN mentioned in step 1. 
 
         We recently encountered a problem with the DSSAT-formatted daily datasets not being updated on a regular basis. It turned out that the process used by FAWN to automate the updates had stopped. If the data lack recent dates, please contact FAWN.
