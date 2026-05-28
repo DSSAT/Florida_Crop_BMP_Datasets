@@ -24,9 +24,12 @@ library(httr)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # 2. Provide station name ======================================================
+# The station names can be found at: https://fawn.ifas.ufl.edu/data/fawnpub/DSSAT/
+# Alternately, the home page for FAWN opens with a map: https://fawn.ifas.ufl.edu
+# From there, one can navigate to a desired location.
 # Enter station information here:
-station_name <- "Jupiter 2"  # Replace name with the FAWN station name
-station_id   <- "FLAJUP"   # Replace the ID with the one for the Crop BMP dataset, preferably as "FLA---"
+station_name <- "Fort Pierce"  # Replace name with the FAWN station name
+station_id   <- "FLAFTP"   # Replace the ID with the one for the Crop BMP dataset., preferably as "FLA---"
 
 # Enter desired start and end dates:
 start_date <- "2022-01-01"
@@ -37,7 +40,10 @@ end_date <- "2024-12-31"
 get_daily_weather_data <- function(station_name, station_id, start_date, end_date) {
   # Construct the URL
   base_url <- "https://fawn.ifas.ufl.edu/data/fawnpub/DSSAT/"
-  file_name <- paste0(station_name, ".csv")
+  # Special handling for names with two parts.
+  # URLencode converts "Live Oak.csv" to "Live%20Oak.csv"
+  file_name <- URLencode(paste0(station_name, ".csv"))
+  
   url <- paste0(base_url, file_name)
   
   # Download the data
@@ -113,30 +119,29 @@ get_daily_weather_data <- function(station_name, station_id, start_date, end_dat
   }
 }
 
-# 4. Call the function with arguments as set at top of script.
+# 4. Call the function with arguments as set at top of script. ====
 output <- get_daily_weather_data(station_name, station_id, start_date, end_date)
 
 #' The object 'output' contains two block of data, which are separated into two 
 #' dataframes here:
-# 4.1 Station metadata
+# 4.1 Station metadata ====
 station_metadata_df <- output$station_data
 
-# 4.2 Daily data for the requested interval
+# 4.2 Daily data for the requested interval ====
 daily_weather_df    <- output$weather_data
 daily_weather_df$'Weather station ID' <- station_id
-daily_weather_df    <- daily_weather_df[ , c(9, 1:8)]
+daily_weather_df    <- daily_weather_df[ , c(9, 1, 4, 3, 5,2, 6:8)]
 
-# 5. Access the daily data and metadata using additional R code
+# 5. Access the daily data and metadata using additional R code ====
 # 5.1 Display portions of the data frames
 print(head(daily_weather_df))
 print(station_metadata_df)
 
-# 5.2 Save the data as two *.CSV files
+# 5.2 Save the data as two *.CSV files ====
 output_metadata_name <- paste0(station_id, "_meta.csv")
 write.csv(station_metadata_df, file = output_metadata_name, row.names = FALSE, na = "")
 
 output_daily_name <- paste0(station_id, "_daily.csv")
 write.csv(daily_weather_df, file = output_daily_name, row.names = FALSE, na = "")
-
 
 # End of script
